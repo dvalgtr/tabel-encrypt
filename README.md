@@ -1,1 +1,1 @@
-# obfuscator
+# tabel-encryptor
