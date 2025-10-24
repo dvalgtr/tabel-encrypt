@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .description {
+            color: #aaaaaa;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cccccc;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4a4a4a;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #252525;
+            border-radius: 4px;
+            min-height: 50px;
+            word-break: break-all;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        th {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #252525;
+        }
+
+        .highlight {
+            background-color: #3a3a3a;
+            font-weight: bold;
+        }
+
+        .custom-formula {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-formula input {
+            flex: 1;
+        }
+
+        .method-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text Encryption Tool</h1>
+            <p class="description">Encrypt and decrypt text using various methods including custom formulas. View substitution tables for cipher methods.</p>
+        </header>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>Encryption/Decryption</h2>
+                <div class="form-group">
+                    <label for="textInput">Input Text</label>
+                    <textarea id="textInput" placeholder="Enter text to encrypt or decrypt"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="method">Encryption Method</label>
+                    <select id="method">
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="custom">Custom Formula</option>
+                        <option value="atbash">Atbash Cipher</option>
+                        <option value="reverse">Reverse Text</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="keyGroup">
+                    <label for="key">Shift/Key (for Caesar Cipher)</label>
+                    <input type="number" id="key" value="3" min="1" max="25">
+                </div>
+
+                <div class="form-group" id="customFormulaGroup" style="display: none;">
+                    <label for="customFormula">Custom Formula (use 'x' for character position)</label>
+                    <div class="custom-formula">
+                        <input type="text" id="customFormula" placeholder="e.g., (x + 7) % 26">
+                        <button id="validateFormula">Validate</button>
+                    </div>
+                    <div class="method-info">Formula should use 'x' as the character position (0-25) and return a number.</div>
+                </div>
+
+                <div class="actions">
+                    <button id="encryptBtn">Encrypt</button>
+                    <button id="decryptBtn">Decrypt</button>
+                    <button id="clearBtn">Clear</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="result">Result</label>
+                    <div class="result" id="result"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Substitution Table</h2>
+                <div class="form-group">
+                    <label for="tableMethod">Method for Table</label>
+                    <select id="tableMethod">
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="custom">Custom Formula</option>
+                        <option value="atbash">Atbash Cipher</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="tableKeyGroup">
+                    <label for="tableKey">Shift/Key</label>
+                    <input type="number" id="tableKey" value="3" min="1" max="25">
+                </div>
+
+                <div class="form-group" id="tableFormulaGroup" style="display: none;">
+                    <label for="tableFormula">Custom Formula</label>
+                    <input type="text" id="tableFormula" placeholder="e.g., (x + 7) % 26">
+                </div>
+
+                <button id="generateTable">Generate Table</button>
+
+                <div class="table-container">
+                    <table id="substitutionTable">
+                        <thead>
+                            <tr>
+                                <th>Original</th>
+                                <th>Encrypted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Text Encryption Tool &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const methodSelect = document.getElementById('method');
+            const keyGroup = document.getElementById('keyGroup');
+            const customFormulaGroup = document.getElementById('customFormulaGroup');
+            const tableMethodSelect = document.getElementById('tableMethod');
+            const tableKeyGroup = document.getElementById('tableKeyGroup');
+            const tableFormulaGroup = document.getElementById('tableFormulaGroup');
+            const encryptBtn = document.getElementById('encryptBtn');
+            const decryptBtn = document.getElementById('decryptBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const generateTableBtn = document.getElementById('generateTable');
+            const validateFormulaBtn = document.getElementById('validateFormula');
+            const resultDiv = document.getElementById('result');
+            const tableBody = document.querySelector('#substitutionTable tbody');
+
+            methodSelect.addEventListener('change', toggleMethodInputs);
+            tableMethodSelect.addEventListener('change', toggleTableMethodInputs);
+
+            function toggleMethodInputs() {
+                const method = methodSelect.value;
+                
+                if (method === 'caesar') {
+                    keyGroup.style.display = 'block';
+                    customFormulaGroup.style.display = 'none';
+                } else if (method === 'custom') {
+                    keyGroup.style.display = 'none';
+                    customFormulaGroup.style.display = 'block';
+                } else {
+                    keyGroup.style.display = 'none';
+                    customFormulaGroup.style.display = 'none';
+                }
+            }
+
+            function toggleTableMethodInputs() {
+                const method = tableMethodSelect.value;
+                
+                if (method === 'caesar') {
+                    tableKeyGroup.style.display = 'block';
+                    tableFormulaGroup.style.display = 'none';
+                } else if (method === 'custom') {
+                    tableKeyGroup.style.display = 'none';
+                    tableFormulaGroup.style.display = 'block';
+                } else {
+                    tableKeyGroup.style.display = 'none';
+                    tableFormulaGroup.style.display = 'none';
+                }
+            }
+
+            function encryptText(text, method, key, formula) {
+                if (!text) return '';
+                
+                switch(method) {
+                    case 'caesar':
+                        return caesarCipher(text, parseInt(key));
+                    case 'custom':
+                        return customCipher(text, formula);
+                    case 'atbash':
+                        return atbashCipher(text);
+                    case 'reverse':
+                        return reverseText(text);
+                    default:
+                        return text;
+                }
+            }
+
+            function decryptText(text, method, key, formula) {
+                if (!text) return '';
+                
+                switch(method) {
+                    case 'caesar':
+                        return caesarCipher(text, 26 - parseInt(key));
+                    case 'custom':
+                        return customDecipher(text, formula);
+                    case 'atbash':
+                        return atbashCipher(text);
+                    case 'reverse':
+                        return reverseText(text);
+                    default:
+                        return text;
+                }
+            }
+
+            function caesarCipher(text, shift) {
+                shift = shift % 26;
+                if (shift < 0) shift += 26;
+                
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const code = text.charCodeAt(i);
+                        
+                        if (code >= 65 && code <= 90) {
+                            char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+                        } else if (code >= 97 && code <= 122) {
+                            char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function customCipher(text, formula) {
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const isUpperCase = char === char.toUpperCase();
+                        const code = isUpperCase ? char.charCodeAt(0) - 65 : char.charCodeAt(0) - 97;
+                        
+                        try {
+                            const encryptedCode = eval(formula.replace(/x/g, code)) % 26;
+                            const encryptedCharCode = encryptedCode < 0 ? encryptedCode + 26 : encryptedCode;
+                            
+                            char = String.fromCharCode(
+                                isUpperCase ? encryptedCharCode + 65 : encryptedCharCode + 97
+                            );
+                        } catch (e) {
+                            console.error('Formula error:', e);
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function customDecipher(text, formula) {
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const isUpperCase = char === char.toUpperCase();
+                        const code = isUpperCase ? char.charCodeAt(0) - 65 : char.charCodeAt(0) - 97;
+                        
+                        try {
+                            let decryptedCode = -1;
+                            for (let j = 0; j < 26; j++) {
+                                const testCode = eval(formula.replace(/x/g, j)) % 26;
+                                if (testCode < 0) testCode + 26;
+                                if (testCode === code) {
+                                    decryptedCode = j;
+                                    break;
+                                }
+                            }
+                            
+                            if (decryptedCode !== -1) {
+                                char = String.fromCharCode(
+                                    isUpperCase ? decryptedCode + 65 : decryptedCode + 97
+                                );
+                            }
+                        } catch (e) {
+                            console.error('Formula error:', e);
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function atbashCipher(text) {
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const code = text.charCodeAt(i);
+                        
+                        if (code >= 65 && code <= 90) {
+                            char = String.fromCharCode(90 - (code - 65));
+                        } else if (code >= 97 && code <= 122) {
+                            char = String.fromCharCode(122 - (code - 97));
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function reverseText(text) {
+                return text.split('').reverse().join('');
+            }
+
+            function generateSubstitutionTable(method, key, formula) {
+                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                tableBody.innerHTML = '';
+                
+                for (let i = 0; i < alphabet.length; i++) {
+                    const originalChar = alphabet[i];
+                    let encryptedChar = '';
+                    
+                    switch(method) {
+                        case 'caesar':
+                            encryptedChar = caesarCipher(originalChar, parseInt(key));
+                            break;
+                        case 'custom':
+                            encryptedChar = customCipher(originalChar, formula);
+                            break;
+                        case 'atbash':
+                            encryptedChar = atbashCipher(originalChar);
+                            break;
+                        default:
+                            encryptedChar = originalChar;
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${originalChar}</td>
+                        <td>${encryptedChar}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                }
+            }
+
+            encryptBtn.addEventListener('click', function() {
+                const text = document.getElementById('textInput').value;
+                const method = methodSelect.value;
+                const key = document.getElementById('key').value;
+                const formula = document.getElementById('customFormula').value;
+                
+                const encrypted = encryptText(text, method, key, formula);
+                resultDiv.textContent = encrypted;
+            });
+
+            decryptBtn.addEventListener('click', function() {
+                const text = document.getElementById('textInput').value;
+                const method = methodSelect.value;
+                const key = document.getElementById('key').value;
+                const formula = document.getElementById('customFormula').value;
+                
+                const decrypted = decryptText(text, method, key, formula);
+                resultDiv.textContent = decrypted;
+            });
+
+            clearBtn.addEventListener('click', function() {
+                document.getElementById('textInput').value = '';
+                resultDiv.textContent = '';
+            });
+
+            generateTableBtn.addEventListener('click', function() {
+                const method = tableMethodSelect.value;
+                const key = document.getElementById('tableKey').value;
+                const formula = document.getElementById('tableFormula').value;
+                
+                generateSubstitutionTable(method, key, formula);
+            });
+
+            validateFormulaBtn.addEventListener('click', function() {
+                const formula = document.getElementById('customFormula').value;
+                
+                try {
+                    for (let i = 0; i < 26; i++) {
+                        eval(formula.replace(/x/g, i));
+                    }
+                    alert('Formula is valid!');
+                } catch (e) {
+                    alert('Formula error: ' + e.message);
+                }
+            });
+
+            toggleMethodInputs();
+            toggleTableMethodInputs();
+            generateSubstitutionTable('caesar', 3, '');
+        });
+    </script>
+</body>
+                  </html>
