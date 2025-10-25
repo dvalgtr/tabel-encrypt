@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shell Script Obfuscator</title>
+    <title>Text Encryption Tool</title>
     <style>
-        /* CSS tetap sama */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: #0a0a0a;
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
             padding: 20px;
-            min-height: 100vh;
         }
 
         .container {
@@ -25,28 +24,29 @@
             margin: 0 auto;
         }
 
-        .header {
+        header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
         }
 
-        .title {
-            font-size: 2em;
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            color: #ffffff;
         }
 
-        .subtitle {
-            color: #888;
-            font-size: 1em;
+        .description {
+            color: #aaaaaa;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 30px;
         }
 
         @media (max-width: 768px) {
@@ -55,19 +55,17 @@
             }
         }
 
-        .panel {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 5px;
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
             padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .panel-title {
-            color: #00ff88;
+        h2 {
+            color: #ffffff;
             margin-bottom: 15px;
-            font-size: 1.1em;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
+            font-size: 1.5rem;
         }
 
         .form-group {
@@ -77,589 +75,483 @@
         label {
             display: block;
             margin-bottom: 5px;
-            color: #ccc;
-            font-size: 0.9em;
+            color: #cccccc;
         }
 
-        textarea, input[type="file"] {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
-            background: #2d2d2d;
+            background-color: #2d2d2d;
             border: 1px solid #444;
-            border-radius: 3px;
+            border-radius: 4px;
             color: #e0e0e0;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 1rem;
         }
 
         textarea {
-            min-height: 200px;
+            min-height: 100px;
             resize: vertical;
         }
 
-        .level-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .level-btn {
-            padding: 8px;
-            text-align: center;
-            background: #2d2d2d;
-            border: 1px solid #444;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.2s ease;
-        }
-
-        .level-btn:hover {
-            background: #3d3d3d;
-        }
-
-        .level-btn.active {
-            background: #00ff88;
-            color: #000;
-            border-color: #00ff88;
-        }
-
-        .btn {
-            background: #00ff88;
-            color: #000;
+        button {
+            background-color: #3a3a3a;
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
+            padding: 10px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: all 0.2s ease;
-            width: 100%;
-            margin-bottom: 8px;
-            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            transition: background-color 0.3s;
         }
 
-        .btn:hover {
-            background: #00cc6a;
+        button:hover {
+            background-color: #4a4a4a;
         }
 
-        .btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .actions {
+            display: flex;
             gap: 10px;
-            margin: 15px 0;
-            font-size: 0.8em;
+            margin-top: 15px;
         }
 
-        .stat-item {
-            text-align: center;
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #252525;
+            border-radius: 4px;
+            min-height: 50px;
+            word-break: break-all;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
             padding: 10px;
-            background: #2d2d2d;
-            border-radius: 3px;
+            text-align: center;
             border: 1px solid #444;
         }
 
-        .stat-value {
+        th {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #252525;
+        }
+
+        .highlight {
+            background-color: #3a3a3a;
             font-weight: bold;
-            color: #00ff88;
         }
 
-        .stat-label {
-            color: #888;
-            font-size: 0.7em;
+        .custom-formula {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 3px;
-            text-align: center;
-            font-size: 0.8em;
+        .custom-formula input {
+            flex: 1;
         }
 
-        .alert-success {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid #00ff88;
-            color: #00ff88;
+        .method-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaaaaa;
         }
 
-        .alert-error {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #ff4444;
-            color: #ff4444;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 15px;
-            font-size: 0.8em;
-        }
-
-        .spinner {
-            border: 2px solid #333;
-            border-top: 2px solid #00ff88;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .footer {
+        footer {
             text-align: center;
             margin-top: 30px;
-            padding: 15px;
-            color: #666;
+            padding-top: 20px;
             border-top: 1px solid #333;
-            font-size: 0.7em;
+            color: #777;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1 class="title">SHELL OBFUSCATOR</h1>
-            <h1 class="title">X-Version</h1>
-            <p class="subtitle">Encrypt & Obfuscate your script</p>
-        </div>
+        <header>
+            <h1>Text Encryption Tool</h1>
+            <p class="description">Encrypt and decrypt text using various methods including custom formulas. View substitution tables for cipher methods.</p>
+        </header>
 
         <div class="main-content">
-            <div class="panel">
-                <div class="panel-title">INPUT</div>
-                
+            <div class="card">
+                <h2>Encryption/Decryption</h2>
                 <div class="form-group">
-                    <label>Upload Script:</label>
-                    <input type="file" id="fileInput" accept=".sh,.bash" />
+                    <label for="textInput">Input Text</label>
+                    <textarea id="textInput" placeholder="Enter text to encrypt or decrypt"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Or Paste Script:</label>
-                    <textarea id="inputScript" placeholder="Paste shell script here..."></textarea>
+                    <label for="method">Encryption Method</label>
+                    <select id="method">
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="custom">Custom Formula</option>
+                        <option value="atbash">Atbash Cipher</option>
+                        <option value="reverse">Reverse Text</option>
+                    </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Obfuscation Level:</label>
-                    <div class="level-buttons">
-                        <div class="level-btn active" data-level="1">Safe</div>
-                        <div class="level-btn" data-level="2">Medium</div>
-                        <div class="level-btn" data-level="3">Strong</div>
-                        <div class="level-btn" data-level="4">Maximum</div>
+                <div class="form-group" id="keyGroup">
+                    <label for="key">Shift/Key (for Caesar Cipher)</label>
+                    <input type="number" id="key" value="3" min="1" max="25">
+                </div>
+
+                <div class="form-group" id="customFormulaGroup" style="display: none;">
+                    <label for="customFormula">Custom Formula (use 'x' for character position)</label>
+                    <div class="custom-formula">
+                        <input type="text" id="customFormula" placeholder="e.g., (x + 7) % 26">
+                        <button id="validateFormula">Validate</button>
                     </div>
+                    <div class="method-info">Formula should use 'x' as the character position (0-25) and return a number.</div>
                 </div>
 
-                <button class="btn" id="obfuscateBtn">OBFUSCATE</button>
-
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>Processing...</p>
+                <div class="actions">
+                    <button id="encryptBtn">Encrypt</button>
+                    <button id="decryptBtn">Decrypt</button>
+                    <button id="clearBtn">Clear</button>
                 </div>
 
-                <div id="alert"></div>
+                <div class="form-group">
+                    <label for="result">Result</label>
+                    <div class="result" id="result"></div>
+                </div>
             </div>
 
-            <div class="panel">
-                <div class="panel-title">OUTPUT</div>
-                
+            <div class="card">
+                <h2>Substitution Table</h2>
                 <div class="form-group">
-                    <label>Obfuscated Script:</label>
-                    <textarea id="outputScript" readonly placeholder="Obfuscated script will appear here..."></textarea>
+                    <label for="tableMethod">Method for Table</label>
+                    <select id="tableMethod">
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="custom">Custom Formula</option>
+                        <option value="atbash">Atbash Cipher</option>
+                    </select>
                 </div>
 
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="inputSize">0</div>
-                        <div class="stat-label">Input</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="outputSize">0</div>
-                        <div class="stat-label">Output</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="obfuscationLevel">Safe</div>
-                        <div class="stat-label">Level</div>
-                    </div>
+                <div class="form-group" id="tableKeyGroup">
+                    <label for="tableKey">Shift/Key</label>
+                    <input type="number" id="tableKey" value="3" min="1" max="25">
                 </div>
 
-                <button class="btn" id="downloadBtn" disabled>DOWNLOAD</button>
-                <button class="btn" id="copyBtn" disabled>COPY</button>
-                <button class="btn" id="testBtn" disabled>TEST SCRIPT</button>
+                <div class="form-group" id="tableFormulaGroup" style="display: none;">
+                    <label for="tableFormula">Custom Formula</label>
+                    <input type="text" id="tableFormula" placeholder="e.g., (x + 7) % 26">
+                </div>
+
+                <button id="generateTable">Generate Table</button>
+
+                <div class="table-container">
+                    <table id="substitutionTable">
+                        <thead>
+                            <tr>
+                                <th>Original</th>
+                                <th>Encrypted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="footer">
-            <p>Shell Script Obfuscator | @dvalgtr | Stable Version</p>
-        </div>
+        <footer>
+            <p>Text Encryption Tool &copy; 2023</p>
+        </footer>
     </div>
 
     <script>
-        class ShellObfuscator {
-            constructor() {
-                this.currentLevel = 1; // Default ke Safe
-                this.initEventListeners();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const methodSelect = document.getElementById('method');
+            const keyGroup = document.getElementById('keyGroup');
+            const customFormulaGroup = document.getElementById('customFormulaGroup');
+            const tableMethodSelect = document.getElementById('tableMethod');
+            const tableKeyGroup = document.getElementById('tableKeyGroup');
+            const tableFormulaGroup = document.getElementById('tableFormulaGroup');
+            const encryptBtn = document.getElementById('encryptBtn');
+            const decryptBtn = document.getElementById('decryptBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const generateTableBtn = document.getElementById('generateTable');
+            const validateFormulaBtn = document.getElementById('validateFormula');
+            const resultDiv = document.getElementById('result');
+            const tableBody = document.querySelector('#substitutionTable tbody');
 
-            initEventListeners() {
-                document.querySelectorAll('.level-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        this.currentLevel = parseInt(btn.dataset.level);
-                        document.getElementById('obfuscationLevel').textContent = 
-                            ['Safe', 'Medium', 'Strong', 'Maximum'][this.currentLevel - 1];
-                    });
-                });
+            methodSelect.addEventListener('change', toggleMethodInputs);
+            tableMethodSelect.addEventListener('change', toggleTableMethodInputs);
 
-                document.getElementById('fileInput').addEventListener('change', (e) => {
-                    this.handleFileUpload(e.target.files[0]);
-                });
-
-                document.getElementById('obfuscateBtn').addEventListener('click', () => {
-                    this.obfuscateScript();
-                });
-
-                document.getElementById('downloadBtn').addEventListener('click', () => {
-                    this.downloadScript();
-                });
-
-                document.getElementById('copyBtn').addEventListener('click', () => {
-                    this.copyToClipboard();
-                });
-
-                document.getElementById('testBtn').addEventListener('click', () => {
-                    this.testScript();
-                });
-
-                document.getElementById('inputScript').addEventListener('input', () => {
-                    this.updateStats();
-                });
-            }
-
-            handleFileUpload(file) {
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('inputScript').value = e.target.result;
-                    this.updateStats();
-                    this.showAlert('File loaded!', 'success');
-                };
-                reader.readAsText(file);
-            }
-
-            generateRandomName() {
-                const prefixes = ['_x', '_var', '_tmp', '_obj', '_data', '_fn'];
-                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-                let name = prefix;
-                for (let i = 0; i < 6; i++) {
-                    name += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return name;
-            }
-
-            safeBase64Encode(data, iterations) {
-                let encoded = data;
-                for (let i = 0; i < iterations; i++) {
-                    try {
-                        encoded = btoa(unescape(encodeURIComponent(encoded)));
-                    } catch (e) {
-                        console.warn('Base64 encoding issue at iteration', i);
-                        break;
-                    }
-                }
-                return encoded;
-            }
-
-            removeComments(script) {
-                // Hanya hapus komentar yang standalone, pertahankan shebang
-                const lines = script.split('\n');
-                const result = [];
+            function toggleMethodInputs() {
+                const method = methodSelect.value;
                 
-                for (let i = 0; i < lines.length; i++) {
-                    let line = lines[i];
+                if (method === 'caesar') {
+                    keyGroup.style.display = 'block';
+                    customFormulaGroup.style.display = 'none';
+                } else if (method === 'custom') {
+                    keyGroup.style.display = 'none';
+                    customFormulaGroup.style.display = 'block';
+                } else {
+                    keyGroup.style.display = 'none';
+                    customFormulaGroup.style.display = 'none';
+                }
+            }
+
+            function toggleTableMethodInputs() {
+                const method = tableMethodSelect.value;
+                
+                if (method === 'caesar') {
+                    tableKeyGroup.style.display = 'block';
+                    tableFormulaGroup.style.display = 'none';
+                } else if (method === 'custom') {
+                    tableKeyGroup.style.display = 'none';
+                    tableFormulaGroup.style.display = 'block';
+                } else {
+                    tableKeyGroup.style.display = 'none';
+                    tableFormulaGroup.style.display = 'none';
+                }
+            }
+
+            function encryptText(text, method, key, formula) {
+                if (!text) return '';
+                
+                switch(method) {
+                    case 'caesar':
+                        return caesarCipher(text, parseInt(key));
+                    case 'custom':
+                        return customCipher(text, formula);
+                    case 'atbash':
+                        return atbashCipher(text);
+                    case 'reverse':
+                        return reverseText(text);
+                    default:
+                        return text;
+                }
+            }
+
+            function decryptText(text, method, key, formula) {
+                if (!text) return '';
+                
+                switch(method) {
+                    case 'caesar':
+                        return caesarCipher(text, 26 - parseInt(key));
+                    case 'custom':
+                        return customDecipher(text, formula);
+                    case 'atbash':
+                        return atbashCipher(text);
+                    case 'reverse':
+                        return reverseText(text);
+                    default:
+                        return text;
+                }
+            }
+
+            function caesarCipher(text, shift) {
+                shift = shift % 26;
+                if (shift < 0) shift += 26;
+                
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
                     
-                    // Pertahankan shebang di line pertama
-                    if (i === 0 && line.startsWith('#!')) {
-                        result.push(line);
-                        continue;
+                    if (char.match(/[a-z]/i)) {
+                        const code = text.charCodeAt(i);
+                        
+                        if (code >= 65 && code <= 90) {
+                            char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+                        } else if (code >= 97 && code <= 122) {
+                            char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+                        }
                     }
                     
-                    // Hapus komentar di akhir line, tapi hati-hati dengan escaped chars
-                    const commentIndex = line.indexOf('#');
-                    if (commentIndex !== -1) {
-                        // Skip jika # dalam quotes
-                        let inSingleQuote = false;
-                        let inDoubleQuote = false;
-                        let escaped = false;
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function customCipher(text, formula) {
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const isUpperCase = char === char.toUpperCase();
+                        const code = isUpperCase ? char.charCodeAt(0) - 65 : char.charCodeAt(0) - 97;
                         
-                        for (let j = 0; j < commentIndex; j++) {
-                            const char = line[j];
-                            if (!escaped) {
-                                if (char === "'" && !inDoubleQuote) inSingleQuote = !inSingleQuote;
-                                else if (char === '"' && !inSingleQuote) inDoubleQuote = !inDoubleQuote;
-                                else if (char === '\\') escaped = true;
-                            } else {
-                                escaped = false;
+                        try {
+                            const encryptedCode = eval(formula.replace(/x/g, code)) % 26;
+                            const encryptedCharCode = encryptedCode < 0 ? encryptedCode + 26 : encryptedCode;
+                            
+                            char = String.fromCharCode(
+                                isUpperCase ? encryptedCharCode + 65 : encryptedCharCode + 97
+                            );
+                        } catch (e) {
+                            console.error('Formula error:', e);
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                return result;
+            }
+
+            function customDecipher(text, formula) {
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const isUpperCase = char === char.toUpperCase();
+                        const code = isUpperCase ? char.charCodeAt(0) - 65 : char.charCodeAt(0) - 97;
+                        
+                        try {
+                            let decryptedCode = -1;
+                            for (let j = 0; j < 26; j++) {
+                                const testCode = eval(formula.replace(/x/g, j)) % 26;
+                                if (testCode < 0) testCode + 26;
+                                if (testCode === code) {
+                                    decryptedCode = j;
+                                    break;
+                                }
                             }
-                        }
-                        
-                        if (!inSingleQuote && !inDoubleQuote) {
-                            line = line.substring(0, commentIndex).trim();
+                            
+                            if (decryptedCode !== -1) {
+                                char = String.fromCharCode(
+                                    isUpperCase ? decryptedCode + 65 : decryptedCode + 97
+                                );
+                            }
+                        } catch (e) {
+                            console.error('Formula error:', e);
                         }
                     }
                     
-                    if (line.trim().length > 0) {
-                        result.push(line);
-                    }
+                    result += char;
                 }
                 
-                return result.join('\n');
+                return result;
             }
 
-            addSafeGarbage(script, count) {
-                if (count === 0) return script;
+            function atbashCipher(text) {
+                let result = '';
                 
-                const garbageLines = [];
-                
-                // Garbage code yang benar-benar aman
-                for (let i = 0; i < count; i++) {
-                    const varName = this.generateRandomName();
-                    garbageLines.push(`:(){ :|:& };:`); // Dummy comment-style
-                    garbageLines.push(`${varName}="dummy_value_${i}"`);
-                    garbageLines.push(`unset ${varName} 2>/dev/null || true`);
-                    garbageLines.push(`echo -n ""`); // Silent echo
-                }
-                
-                // Insert setelah shebang
-                if (script.startsWith('#!/')) {
-                    const firstNewline = script.indexOf('\n');
-                    if (firstNewline !== -1) {
-                        return script.substring(0, firstNewline + 1) + 
-                               garbageLines.join('\n') + '\n' +
-                               script.substring(firstNewline + 1);
-                    }
-                }
-                
-                return garbageLines.join('\n') + '\n' + script;
-            }
-
-            createStableWrapper(encodedScript, layers) {
-                return `#!/bin/bash
-# Obfuscated by Shell Script Obfuscator - Stable Version
-# This script is guaranteed to work on most systems
-
-decode_script() {
-    local encoded="$1"
-    local layers="$2"
-    local decoded="$encoded"
-    local i=0
-    
-    while [ $i -lt $layers ]; do
-        if command -v base64 >/dev/null 2>&1; then
-            decoded=$(echo "$decoded" | base64 -d 2>/dev/null)
-        else
-            echo "Error: base64 command not found" >&2
-            return 1
-        fi
-        
-        if [ $? -ne 0 ]; then
-            echo "Error: Decoding failed at layer $((i + 1))" >&2
-            return 1
-        fi
-        i=$((i + 1))
-    done
-    
-    echo "$decoded"
-}
-
-main() {
-    local obfuscated_data="${encodedScript}"
-    local decode_layers="${layers}"
-    
-    # Decode and execute
-    local original_script=$(decode_script "$obfuscated_data" "$decode_layers")
-    
-    if [ $? -eq 0 ] && [ -n "$original_script" ]; then
-        eval "$original_script"
-    else
-        echo "Error: Failed to decode script" >&2
-        exit 1
-    fi
-}
-
-# Execute main function
-main "$@"
-`;
-            }
-
-            obfuscateScript() {
-                const inputScript = document.getElementById('inputScript').value.trim();
-                
-                if (!inputScript) {
-                    this.showAlert('Please enter or upload a script!', 'error');
-                    return;
-                }
-
-                // Validasi script dasar
-                if (inputScript.length > 100000) {
-                    this.showAlert('Script too large! Please use smaller script.', 'error');
-                    return;
-                }
-
-                this.showLoading(true);
-                
-                setTimeout(() => {
-                    try {
-                        let processedScript = inputScript;
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    
+                    if (char.match(/[a-z]/i)) {
+                        const code = text.charCodeAt(i);
                         
-                        // Konfigurasi berdasarkan level - SANGAT KONSERVATIF
-                        const levels = {
-                            1: { 
-                                commentRemove: true,
-                                garbage: 0,    // No garbage code
-                                base64: 1      // Minimal encoding
-                            },
-                            2: { 
-                                commentRemove: true,
-                                garbage: 2,    // Sedikit garbage
-                                base64: 2      // 2 layer encoding
-                            },
-                            3: { 
-                                commentRemove: true,
-                                garbage: 3,    // Sedikit lebih banyak garbage
-                                base64: 3      // 3 layer encoding
-                            },
-                            4: { 
-                                commentRemove: true,
-                                garbage: 5,    // Moderate garbage
-                                base64: 4      // 4 layer encoding
-                            }
-                        };
-                        
-                        const config = levels[this.currentLevel];
-                        
-                        // Step 1: Remove comments (aman)
-                        if (config.commentRemove) {
-                            processedScript = this.removeComments(processedScript);
+                        if (code >= 65 && code <= 90) {
+                            char = String.fromCharCode(90 - (code - 65));
+                        } else if (code >= 97 && code <= 122) {
+                            char = String.fromCharCode(122 - (code - 97));
                         }
-                        
-                        // Step 2: Add safe garbage code
-                        if (config.garbage > 0) {
-                            processedScript = this.addSafeGarbage(processedScript, config.garbage);
-                        }
-                        
-                        // Step 3: Base64 encoding
-                        const encoded = this.safeBase64Encode(processedScript, config.base64);
-                        
-                        // Step 4: Create final script dengan wrapper yang stabil
-                        const finalScript = this.createStableWrapper(encoded, config.base64);
-                        
-                        document.getElementById('outputScript').value = finalScript;
-                        this.updateStats();
-                        this.showAlert('Obfuscation complete! Script is stable and tested.', 'success');
-                        
-                        // Enable buttons
-                        document.getElementById('downloadBtn').disabled = false;
-                        document.getElementById('copyBtn').disabled = false;
-                        document.getElementById('testBtn').disabled = false;
-                        
-                    } catch (error) {
-                        console.error('Obfuscation error:', error);
-                        this.showAlert('Error: ' + error.message, 'error');
-                    } finally {
-                        this.showLoading(false);
                     }
-                }, 500);
-            }
-
-            testScript() {
-                const script = document.getElementById('outputScript').value;
-                if (!script) return;
-
-                this.showAlert('Testing script syntax...', 'success');
+                    
+                    result += char;
+                }
                 
-                // Simulate syntax check
-                setTimeout(() => {
-                    this.showAlert('✓ Script syntax appears valid', 'success');
-                }, 1000);
+                return result;
             }
 
-            showLoading(show) {
-                document.getElementById('loading').style.display = show ? 'block' : 'none';
-                document.getElementById('obfuscateBtn').disabled = show;
+            function reverseText(text) {
+                return text.split('').reverse().join('');
             }
 
-            showAlert(message, type) {
-                const alertDiv = document.getElementById('alert');
-                alertDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-                setTimeout(() => {
-                    alertDiv.innerHTML = '';
-                }, 4000);
-            }
-
-            updateStats() {
-                const inputScript = document.getElementById('inputScript').value;
-                const outputScript = document.getElementById('outputScript').value;
+            function generateSubstitutionTable(method, key, formula) {
+                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                tableBody.innerHTML = '';
                 
-                document.getElementById('inputSize').textContent = this.formatSize(inputScript.length);
-                document.getElementById('outputSize').textContent = this.formatSize(outputScript.length);
+                for (let i = 0; i < alphabet.length; i++) {
+                    const originalChar = alphabet[i];
+                    let encryptedChar = '';
+                    
+                    switch(method) {
+                        case 'caesar':
+                            encryptedChar = caesarCipher(originalChar, parseInt(key));
+                            break;
+                        case 'custom':
+                            encryptedChar = customCipher(originalChar, formula);
+                            break;
+                        case 'atbash':
+                            encryptedChar = atbashCipher(originalChar);
+                            break;
+                        default:
+                            encryptedChar = originalChar;
+                    }
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${originalChar}</td>
+                        <td>${encryptedChar}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                }
             }
 
-            formatSize(bytes) {
-                if (bytes === 0) return '0 B';
-                const k = 1024;
-                const sizes = ['B', 'KB', 'MB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-            }
-
-            downloadScript() {
-                const script = document.getElementById('outputScript').value;
-                if (!script) return;
-
-                const blob = new Blob([script], { type: 'text/x-shellscript' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'obfuscated_script.sh';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+            encryptBtn.addEventListener('click', function() {
+                const text = document.getElementById('textInput').value;
+                const method = methodSelect.value;
+                const key = document.getElementById('key').value;
+                const formula = document.getElementById('customFormula').value;
                 
-                this.showAlert('Downloaded!', 'success');
-            }
+                const encrypted = encryptText(text, method, key, formula);
+                resultDiv.textContent = encrypted;
+            });
 
-            copyToClipboard() {
-                const outputScript = document.getElementById('outputScript');
-                outputScript.select();
-                outputScript.setSelectionRange(0, 99999);
+            decryptBtn.addEventListener('click', function() {
+                const text = document.getElementById('textInput').value;
+                const method = methodSelect.value;
+                const key = document.getElementById('key').value;
+                const formula = document.getElementById('customFormula').value;
+                
+                const decrypted = decryptText(text, method, key, formula);
+                resultDiv.textContent = decrypted;
+            });
+
+            clearBtn.addEventListener('click', function() {
+                document.getElementById('textInput').value = '';
+                resultDiv.textContent = '';
+            });
+
+            generateTableBtn.addEventListener('click', function() {
+                const method = tableMethodSelect.value;
+                const key = document.getElementById('tableKey').value;
+                const formula = document.getElementById('tableFormula').value;
+                
+                generateSubstitutionTable(method, key, formula);
+            });
+
+            validateFormulaBtn.addEventListener('click', function() {
+                const formula = document.getElementById('customFormula').value;
                 
                 try {
-                    navigator.clipboard.writeText(outputScript.value).then(() => {
-                        this.showAlert('Copied to clipboard!', 'success');
-                    });
+                    for (let i = 0; i < 26; i++) {
+                        eval(formula.replace(/x/g, i));
+                    }
+                    alert('Formula is valid!');
                 } catch (e) {
-                    document.execCommand('copy');
-                    this.showAlert('Copied!', 'success');
+                    alert('Formula error: ' + e.message);
                 }
-            }
-        }
+            });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            new ShellObfuscator();
+            toggleMethodInputs();
+            toggleTableMethodInputs();
+            generateSubstitutionTable('caesar', 3, '');
         });
     </script>
 </body>
